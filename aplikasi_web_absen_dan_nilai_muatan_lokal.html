@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Web Absen dan Nilai Muatan Lokal - SDS IT Assa’adah</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandPrimary: '#990909',
+            brandDark: '#750606',
+            brandSecondary: '#8A8A8A',
+            brandLight: '#f8fafc',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar & Utility styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8A8A8A;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #990909;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col antialiased selection:bg-brandPrimary selection:text-white">
+
+  <!-- ==================== PAGE LOGIN ==================== -->
+  <div id="loginPage" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-brandPrimary via-slate-900 to-slate-800 p-4">
+    <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl w-full max-w-md p-8 border border-white/20 relative overflow-hidden">
+      <!-- Decorative Header -->
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-brandPrimary/20 rounded-full blur-2xl"></div>
+      
+      <div class="text-center mb-8 relative z-10">
+        <div class="w-16 h-16 bg-brandPrimary text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brandPrimary/40">
+          <i class="fa-solid me-0 fa-graduation-cap text-3xl"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">SDS IT Assa’adah</h1>
+        <p class="text-xs font-semibold uppercase tracking-wider text-brandSecondary mt-1">Sistem Absensi & Nilai Muatan Lokal</p>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5 relative z-10">
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Username</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <i class="fa-solid fa-user"></i>
+            </span>
+            <input type="text" id="loginUsername" required placeholder="Masukkan Username"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-brandPrimary focus:ring-2 focus:ring-brandPrimary/20 text-slate-800 transition">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <i class="fa-solid fa-lock"></i>
+            </span>
+            <input type="password" id="loginPassword" required placeholder="Masukkan Password"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-brandPrimary focus:ring-2 focus:ring-brandPrimary/20 text-slate-800 transition">
+          </div>
+        </div>
+
+        <div id="loginError" class="hidden text-red-600 text-xs font-medium bg-red-50 p-3 rounded-lg text-center border border-red-200">
+          <i class="fa-solid fa-circle-exclamation mr-1"></i> Username atau password salah!
+        </div>
+
+        <button type="submit"
+          class="w-full bg-brandPrimary hover:bg-brandDark text-white font-semibold py-3 rounded-xl shadow-lg shadow-brandPrimary/30 active:scale-[0.98] transition duration-200 flex items-center justify-center gap-2">
+          <span>Masuk Portal</span>
+          <i class="fa-solid fa-right-to-bracket"></i>
+        </button>
+      </form>
+
+      <div class="mt-6 text-center text-xs text-brandSecondary">
+        &copy; Kelas 6 SD - SDS IT Assa’adah
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== MAIN DASHBOARD APP ==================== -->
+  <div id="mainApp" class="hidden flex-col min-h-screen pb-20 md:pb-6">
+
+    <!-- HEADER & NAVBAR -->
+    <header class="bg-gradient-to-r from-brandPrimary to-brandDark text-white shadow-lg sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          
+          <!-- Logo & Info Sekolah -->
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center border border-white/20 shadow-inner shrink-0">
+              <i class="fa-solid fa-book-open text-2xl text-amber-300"></i>
+            </div>
+            <div>
+              <h1 class="text-lg sm:text-xl font-bold tracking-tight">Aplikasi Web Absen dan Nilai Muatan Lokal</h1>
+              <div class="flex flex-wrap items-center gap-2 text-xs text-slate-200 font-medium">
+                <span class="bg-white/20 px-2 py-0.5 rounded text-white"><i class="fa-solid fa-school mr-1"></i>SDS IT Assa’adah</span>
+                <span class="bg-amber-400 text-brandDark px-2 py-0.5 rounded font-bold"><i class="fa-solid fa-chalkboard-user mr-1"></i>Kelas 6 SD</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Clock & Date Badge -->
+          <div class="flex items-center justify-between md:justify-end gap-3 border-t border-white/10 pt-2 md:border-0 md:pt-0 text-xs sm:text-sm">
+            <div class="bg-black/20 backdrop-blur px-3 py-1.5 rounded-xl border border-white/10 flex items-center gap-2 font-mono text-amber-200">
+              <i class="fa-regular fa-clock"></i>
+              <span id="liveClock">00:00:00 WIB</span>
+            </div>
+            <div class="bg-black/20 backdrop-blur px-3 py-1.5 rounded-xl border border-white/10 flex items-center gap-2 text-slate-100">
+              <i class="fa-regular fa-calendar-days text-amber-300"></i>
+              <span id="liveDate">Senin, 1 Jan 2026</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </header>
+
+    <!-- BANNER SALUTATION -->
+    <section class="bg-white border-b border-slate-200 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-brandPrimary border border-slate-200 shadow-sm">
+            <i class="fa-solid fa-hand-wave text-lg"></i>
+          </div>
+          <div>
+            <h2 id="greetingText" class="text-base sm:text-lg font-bold text-slate-800">
+              Selamat Datang, Pak Diki
+            </h2>
+            <p class="text-xs text-brandSecondary">Kelola absensi dan nilai siswa kelas 6 SD dengan cepat dan terstruktur.</p>
+          </div>
+        </div>
+
+        <!-- Indicator Connectivity Web App Script -->
+        <div class="flex items-center gap-2 text-xs bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-slate-600 font-medium">Spreadsheet:</span>
+          <span id="scriptStatusText" class="text-slate-800 font-semibold truncate max-w-[150px]">Tersambung</span>
+          <button onclick="openConfigModal()" class="text-brandPrimary hover:underline font-bold ml-1" title="Konfigurasi Web App URL">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+      <!-- TAB 1: HOME (ABSENSI & NILAI) -->
+      <div id="tabHome" class="space-y-6">
+
+        <!-- FILTER BAR: MATA PELAJARAN & TANGGAL -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+          <div class="flex-1">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Pilih Mata Pelajaran (Muatan Lokal)</label>
+            <div class="relative">
+              <select id="selectMapel" class="w-full bg-slate-50 border border-slate-300 font-semibold text-slate-800 rounded-xl px-4 py-2.5 pr-8 focus:outline-none focus:border-brandPrimary focus:ring-2 focus:ring-brandPrimary/20 appearance-none">
+                <option value="BAHASA ARAB">BAHASA ARAB</option>
+                <option value="BAHASA INGGRIS">BAHASA INGGRIS</option>
+                <option value="SEJARAH KEBUDAYAAN ISLAM">SEJARAH KEBUDAYAAN ISLAM</option>
+                <option value="AL-QUR’AN DAN HADIST">AL-QUR’AN DAN HADIST</option>
+                <option value="AKIDAH AKHLAK">AKIDAH AKHLAK</option>
+                <option value="KODING">KODING</option>
+                <option value="PENDIDIKAN JASMANI DAN ROHANI">PENDIDIKAN JASMANI DAN ROHANI</option>
+                <option value="PENDIDIKAN AGAMA ISLAM">PENDIDIKAN AGAMA ISLAM</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full md:w-64">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Tanggal Kegiatan</label>
+            <input type="date" id="inputTanggal" class="w-full bg-slate-50 border border-slate-300 font-medium text-slate-800 rounded-xl px-4 py-2 focus:outline-none focus:border-brandPrimary">
+          </div>
+        </div>
+
+
+        <!-- NAVIGATION SEGMENT / MODUL SELECTION -->
+        <div class="bg-slate-200/80 p-1.5 rounded-2xl flex flex-wrap gap-1 border border-slate-300/60 shadow-inner">
+          <button onclick="switchSubModul('absensi')" id="btnModulAbsensi" class="flex-1 min-w-[120px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 bg-brandPrimary text-white shadow">
+            <i class="fa-solid fa-clipboard-user"></i>
+            <span>Absensi Siswa</span>
+          </button>
+          
+          <button onclick="switchSubModul('harian')" id="btnModulHarian" class="flex-1 min-w-[120px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 text-slate-600 hover:bg-white/60">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>Latihan Harian</span>
+          </button>
+
+          <button onclick="switchSubModul('akhirBab')" id="btnModulAkhirBab" class="flex-1 min-w-[120px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 text-slate-600 hover:bg-white/60">
+            <i class="fa-solid fa-book-bookmark"></i>
+            <span>Latihan Akhir Bab</span>
+          </button>
+
+          <button onclick="switchSubModul('ulangan')" id="btnModulUlangan" class="flex-1 min-w-[120px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 text-slate-600 hover:bg-white/60">
+            <i class="fa-solid fa-file-pen"></i>
+            <span>Ulangan Harian</span>
+          </button>
+
+          <button onclick="switchSubModul('sts')" id="btnModulSTS" class="flex-1 min-w-[120px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 text-slate-600 hover:bg-white/60">
+            <i class="fa-solid fa-file-certificate"></i>
+            <span>STS</span>
+          </button>
+
+          <button onclick="switchSubModul('sas')" id="btnModulSAS" class="flex-1 min-w-[120px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 text-slate-600 hover:bg-white/60">
+            <i class="fa-solid fa-award"></i>
+            <span>SAS</span>
+          </button>
+        </div>
+
+
+        <!-- SUB MODULE PANEL: PANEL ABSENSI -->
+        <div id="panelAbsensi" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="p-4 sm:p-5 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div>
+              <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                <i class="fa-solid fa-user-check text-brandPrimary"></i>
+                Formulir Presensi Kehadiran Siswa
+              </h3>
+              <p class="text-xs text-brandSecondary">Tandai status kehadiran untuk 16 Murid Kelas 6 SD</p>
+            </div>
+            
+            <!-- Quick Set Buttons -->
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-slate-500 font-medium">Set Semua:</span>
+              <button onclick="setAllAbsen('Hadir')" class="px-2.5 py-1 bg-emerald-100 text-emerald-800 hover:bg-emerald-200 rounded-lg font-bold transition">Hadir</button>
+              <button onclick="setAllAbsen('Izin')" class="px-2.5 py-1 bg-amber-100 text-amber-800 hover:bg-amber-200 rounded-lg font-bold transition">Izin</button>
+              <button onclick="setAllAbsen('Sakit')" class="px-2.5 py-1 bg-blue-100 text-blue-800 hover:bg-blue-200 rounded-lg font-bold transition">Sakit</button>
+            </div>
+          </div>
+
+          <!-- LIST SISWA ABSENSI -->
+          <div class="divide-y divide-slate-100 max-h-[500px] overflow-y-auto">
+            <div id="studentAbsenList">
+              <!-- Dynamically rendered JS -->
+            </div>
+          </div>
+
+          <!-- Bottom Action -->
+          <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+            <div class="text-xs text-slate-500 font-medium">
+              Total: <span class="font-bold text-slate-800">16 Siswa</span>
+            </div>
+            <button onclick="submitData('absensi')" class="bg-brandPrimary hover:bg-brandDark text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md shadow-brandPrimary/30 transition flex items-center gap-2">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span>Simpan Presensi Ke Spreadsheet</span>
+            </button>
+          </div>
+        </div>
+
+
+        <!-- SUB MODULE PANEL: PANEL INPUT NILAI (GENERIC REUSABLE FOR HARIAN, AKHIR BAB, ULANGAN, STS, SAS) -->
+        <div id="panelNilai" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="p-4 sm:p-5 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div>
+              <h3 id="nilaiPanelTitle" class="font-bold text-slate-800 text-base flex items-center gap-2">
+                <i class="fa-solid fa-star text-amber-500"></i>
+                Input Nilai Latihan Harian
+              </h3>
+              <p class="text-xs text-brandSecondary">Masukkan nilai (0 - 100) dan catatan opsional untuk setiap siswa</p>
+            </div>
+
+            <!-- Quick Filler -->
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-slate-500 font-medium">Auto Nilai:</span>
+              <button onclick="quickFillNilai(100)" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg font-bold transition">100</button>
+              <button onclick="quickFillNilai(85)" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg font-bold transition">85</button>
+              <button onclick="quickFillNilai(0)" class="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-bold transition">Reset 0</button>
+            </div>
+          </div>
+
+          <!-- LIST SISWA NILAI -->
+          <div class="divide-y divide-slate-100 max-h-[500px] overflow-y-auto">
+            <div id="studentNilaiList">
+              <!-- Dynamically rendered JS -->
+            </div>
+          </div>
+
+          <!-- Bottom Action -->
+          <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+            <div class="text-xs text-slate-500 font-medium">
+              Rata-rata: <span id="avgNilaiBadge" class="font-bold text-brandPrimary bg-red-50 px-2 py-0.5 rounded border border-red-200">0.0</span>
+            </div>
+            <button onclick="submitData('nilai')" class="bg-brandPrimary hover:bg-brandDark text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md shadow-brandPrimary/30 transition flex items-center gap-2">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span>Simpan Nilai Ke Spreadsheet</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- TAB 2: PENGATURAN -->
+      <div id="tabSettings" class="hidden space-y-6 max-w-2xl mx-auto">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+          <div class="border-b border-slate-200 pb-4">
+            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-user-gear text-brandPrimary"></i>
+              Pengaturan Profil Guru & Akses
+            </h3>
+            <p class="text-xs text-brandSecondary mt-1">Kelola data identitas guru dan preferensi akun Anda</p>
+          </div>
+
+          <form onsubmit="saveProfileSettings(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Nama Guru</label>
+              <input type="text" id="settingNamaGuru" value="Pak Diki" required
+                class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 font-medium focus:outline-none focus:border-brandPrimary">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Username Login</label>
+              <input type="text" id="settingUsername" value="deikai" required
+                class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 font-medium focus:outline-none focus:border-brandPrimary">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Password Baru</label>
+              <input type="password" id="settingPassword" value="Dpa10416195" required
+                class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 font-medium focus:outline-none focus:border-brandPrimary">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Google Apps Script Web App URL</label>
+              <input type="url" id="settingScriptUrl" placeholder="https://script.google.com/macros/s/.../exec" required
+                class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 text-xs font-mono focus:outline-none focus:border-brandPrimary">
+              <p class="text-[11px] text-slate-400 mt-1">Masukkan URL deployment Google Apps Script Anda di sini.</p>
+            </div>
+
+            <button type="submit" class="w-full bg-brandPrimary hover:bg-brandDark text-white font-bold py-3 rounded-xl shadow-md transition">
+              Simpan Perubahan
+            </button>
+          </form>
+
+          <hr class="border-slate-200">
+
+          <div class="pt-2">
+            <button onclick="handleLogout()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3 rounded-xl border border-red-200 transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-power-off"></i>
+              <span>Logout Keluar Aplikasi</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+
+    <!-- BOTTOM NAVIGATION (FOR SMARTPHONE & DESKTOP QUICK TAB) -->
+    <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 z-40 shadow-lg">
+      <div class="max-w-md mx-auto flex justify-around py-2">
+        <button onclick="switchMainTab('home')" id="navHome" class="flex flex-col items-center gap-1 text-brandPrimary font-bold text-xs py-1 px-4">
+          <i class="fa-solid fa-house-chimney text-lg"></i>
+          <span>Home (Absen & Nilai)</span>
+        </button>
+        <button onclick="switchMainTab('settings')" id="navSettings" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandPrimary font-semibold text-xs py-1 px-4">
+          <i class="fa-solid fa-sliders text-lg"></i>
+          <span>Pengaturan</span>
+        </button>
+      </div>
+    </nav>
+
+  </div>
+
+
+  <!-- MODAL SCRIPT URL CONFIGURATION -->
+  <div id="configModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+          <i class="fa-solid fa-link text-brandPrimary"></i>
+          Pengaturan URL Google Apps Script
+        </h3>
+        <button onclick="closeConfigModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Agar data Absensi dan Nilai tersimpan langsung ke Google Spreadsheet Anda, tempelkan **Web App URL** dari hasil Deploy Google Apps Script di bawah ini.
+      </p>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Web App URL:</label>
+        <input type="text" id="modalScriptUrlInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec"
+          class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-brandPrimary">
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeConfigModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl">Batal</button>
+        <button onclick="saveModalScriptUrl()" class="px-4 py-2 bg-brandPrimary hover:bg-brandDark text-white text-xs font-bold rounded-xl shadow">Simpan URL</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // ==================== DATA STATE ====================
+    const STUDENTS = [
+      "ADELIA NURPIAH",
+      "AGRIA IZZAHRA ZULFIANI",
+      "AHMAD NUR HAKIM",
+      "AISYAH MUGHNI ALIFA",
+      "ALISYA FITRIANA",
+      "DIMAS FARID ALGADZALY",
+      "HANIF AHMAD ALFARUQI",
+      "JIHAN MUMTAZ NUGRAHA",
+      "KHANSA LYRA TOMIKO",
+      "KIERAN HAYFA GHURRI ERMONO",
+      "MUHAMMAD RAFFI MAULANA",
+      "RIO AHMAD ADISYAH HANDANU",
+      "SITI IRTIA NAZIHA",
+      "UMAR SYAFIQ HABIBY",
+      "KAYYISA ANINDYA HANUM",
+      "NAURA ZAKHYRA FAHRUL"
+    ];
+
+    let currentGuruName = localStorage.getItem('guruName') || "Pak Diki";
+    let authUser = localStorage.getItem('authUser') || "deikai";
+    let authPass = localStorage.getItem('authPass') || "Dpa10416195";
+    let scriptUrl = localStorage.getItem('scriptUrl') || "";
+
+    let currentSubModul = 'absensi'; // 'absensi', 'harian', 'akhirBab', 'ulangan', 'sts', 'sas'
+    
+    // Internal state data
+    let absensiData = {}; // { studentName: 'Hadir' | 'Izin' | 'Sakit' | 'Alpa' }
+    let nilaiData = {};   // { studentName: { score: 0, note: '' } }
+
+    // Init Data
+    STUDENTS.forEach(student => {
+      absensiData[student] = 'Hadir';
+      nilaiData[student] = { score: 80, note: '' };
+    });
+
+    // Initialize Page
+    window.onload = function() {
+      // Set Default Date Input to Today
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('inputTanggal').value = today;
+
+      // Check if logged in
+      if (localStorage.getItem('isLoggedIn') === 'true') {
+        showDashboard();
+      }
+
+      // Start Clock & Dynamic Salutation
+      updateClockAndGreeting();
+      setInterval(updateClockAndGreeting, 1000);
+
+      // Render Initial Lists
+      renderAbsensiList();
+      renderNilaiList();
+      updateScriptStatusUI();
+    };
+
+    // ==================== CLOCK & SALUTATION ====================
+    function updateClockAndGreeting() {
+      const now = new Date();
+      
+      // Clock
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('liveClock').innerText = `${hours}:${minutes}:${seconds} WIB`;
+
+      // Date
+      const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agust', 'Sep', 'Okt', 'Nov', 'Des'];
+      const dayName = days[now.getDay()];
+      const dateStr = `${dayName}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+      document.getElementById('liveDate').innerText = dateStr;
+
+      // Greeting based on hour
+      let timeGreeting = "Pagi";
+      const currentHour = now.getHours();
+      if (currentHour >= 11 && currentHour < 15) {
+        timeGreeting = "Siang";
+      } else if (currentHour >= 15 && currentHour < 18) {
+        timeGreeting = "Sore";
+      } else if (currentHour >= 18 || currentHour < 4) {
+        timeGreeting = "Malam";
+      }
+
+      const greetingElem = document.getElementById('greetingText');
+      if (greetingElem) {
+        greetingElem.innerText = `Selamat ${timeGreeting} ${currentGuruName}, Semoga Harimu ${dayName} Selalu`;
+      }
+    }
+
+    // ==================== AUTHENTICATION ====================
+    function handleLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('loginUsername').value.trim();
+      const p = document.getElementById('loginPassword').value.trim();
+
+      if (u === authUser && p === authPass) {
+        localStorage.setItem('isLoggedIn', 'true');
+        document.getElementById('loginError').classList.add('hidden');
+        showDashboard();
+      } else {
+        document.getElementById('loginError').classList.remove('hidden');
+      }
+    }
+
+    function handleLogout() {
+      if (confirm('Apakah Anda yakin ingin keluar dari aplikasi?')) {
+        localStorage.removeItem('isLoggedIn');
+        document.getElementById('mainApp').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('flex');
+        document.getElementById('loginPage').classList.remove('hidden');
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('mainApp').classList.remove('hidden');
+      document.getElementById('mainApp').classList.add('flex');
+      
+      // Update form values in settings
+      document.getElementById('settingNamaGuru').value = currentGuruName;
+      document.getElementById('settingUsername').value = authUser;
+      document.getElementById('settingPassword').value = authPass;
+      document.getElementById('settingScriptUrl').value = scriptUrl;
+      document.getElementById('modalScriptUrlInput').value = scriptUrl;
+      
+      updateClockAndGreeting();
+    }
+
+    // ==================== SUB MODUL SWITCHING ====================
+    function switchSubModul(modulKey) {
+      currentSubModul = modulKey;
+      
+      const allButtons = [
+        'btnModulAbsensi', 'btnModulHarian', 'btnModulAkhirBab', 
+        'btnModulUlangan', 'btnModulSTS', 'btnModulSAS'
+      ];
+      
+      allButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        btn.className = "flex-1 min-w-[120px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 text-slate-600 hover:bg-white/60";
+      });
+
+      const panelAbsensi = document.getElementById('panelAbsensi');
+      const panelNilai = document.getElementById('panelNilai');
+
+      if (modulKey === 'absensi') {
+        document.getElementById('btnModulAbsensi').className = "flex-1 min-w-[120px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 bg-brandPrimary text-white shadow";
+        panelAbsensi.classList.remove('hidden');
+        panelNilai.classList.add('hidden');
+      } else {
+        let activeBtnId = '';
+        let titleText = '';
+
+        switch(modulKey) {
+          case 'harian':
+            activeBtnId = 'btnModulHarian';
+            titleText = 'Input Nilai Latihan Harian';
+            break;
+          case 'akhirBab':
+            activeBtnId = 'btnModulAkhirBab';
+            titleText = 'Input Nilai Latihan Akhir Bab';
+            break;
+          case 'ulangan':
+            activeBtnId = 'btnModulUlangan';
+            titleText = 'Input Nilai Ulangan Harian';
+            break;
+          case 'sts':
+            activeBtnId = 'btnModulSTS';
+            titleText = 'Input Nilai Sumatif Tengah Semester (STS)';
+            break;
+          case 'sas':
+            activeBtnId = 'btnModulSAS';
+            titleText = 'Input Nilai Sumatif Akhir Semester (SAS)';
+            break;
+        }
+
+        document.getElementById(activeBtnId).className = "flex-1 min-w-[120px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm text-center transition flex items-center justify-center gap-2 bg-brandPrimary text-white shadow";
+        document.getElementById('nilaiPanelTitle').innerHTML = `<i class="fa-solid fa-star text-amber-500"></i> ${titleText}`;
+        
+        panelAbsensi.classList.add('hidden');
+        panelNilai.classList.remove('hidden');
+        calculateAvgNilai();
+      }
+    }
+
+    // ==================== RENDER ABSENSI LIST ====================
+    function renderAbsensiList() {
+      const container = document.getElementById('studentAbsenList');
+      container.innerHTML = '';
+
+      STUDENTS.forEach((student, index) => {
+        const currentStatus = absensiData[student] || 'Hadir';
+        
+        const row = document.createElement('div');
+        row.className = "p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50 transition";
+        row.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0">
+              ${index + 1}
+            </span>
+            <span class="font-semibold text-slate-800 text-sm">${student}</span>
+          </div>
+
+          <!-- Status Options Radio/Buttons -->
+          <div class="flex items-center gap-1.5 self-end sm:self-auto">
+            ${renderAbsenOptionButton(student, 'Hadir', currentStatus, 'emerald')}
+            ${renderAbsenOptionButton(student, 'Izin', currentStatus, 'amber')}
+            ${renderAbsenOptionButton(student, 'Sakit', currentStatus, 'blue')}
+            ${renderAbsenOptionButton(student, 'Alpa', currentStatus, 'rose')}
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function renderAbsenOptionButton(student, status, currentStatus, color) {
+      const active = currentStatus === status;
+      let activeClasses = "";
+      
+      if (active) {
+        if (color === 'emerald') activeClasses = "bg-emerald-600 text-white shadow";
+        if (color === 'amber') activeClasses = "bg-amber-500 text-white shadow";
+        if (color === 'blue') activeClasses = "bg-blue-600 text-white shadow";
+        if (color === 'rose') activeClasses = "bg-rose-600 text-white shadow";
+      } else {
+        activeClasses = "bg-slate-100 text-slate-600 hover:bg-slate-200";
+      }
+
+      return `
+        <button type="button" onclick="setStudentAbsen('${student}', '${status}')"
+          class="px-3 py-1.5 rounded-lg text-xs font-bold transition ${activeClasses}">
+          ${status}
+        </button>
+      `;
+    }
+
+    function setStudentAbsen(student, status) {
+      absensiData[student] = status;
+      renderAbsensiList();
+    }
+
+    function setAllAbsen(status) {
+      STUDENTS.forEach(s => absensiData[s] = status);
+      renderAbsensiList();
+    }
+
+    // ==================== RENDER NILAI LIST ====================
+    function renderNilaiList() {
+      const container = document.getElementById('studentNilaiList');
+      container.innerHTML = '';
+
+      STUDENTS.forEach((student, index) => {
+        const item = nilaiData[student] || { score: 80, note: '' };
+        
+        const row = document.createElement('div');
+        row.className = "p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50 transition";
+        row.innerHTML = `
+          <div class="flex items-center gap-3 sm:w-1/3">
+            <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0">
+              ${index + 1}
+            </span>
+            <span class="font-semibold text-slate-800 text-sm truncate">${student}</span>
+          </div>
+
+          <div class="flex items-center gap-3 flex-1">
+            <div class="w-24 shrink-0">
+              <input type="number" min="0" max="100" value="${item.score}" 
+                onchange="updateNilaiScore('${student}', this.value)"
+                class="w-full bg-slate-50 border border-slate-300 font-bold text-slate-800 rounded-xl px-3 py-1.5 text-center text-sm focus:outline-none focus:border-brandPrimary">
+            </div>
+            
+            <input type="text" placeholder="Catatan opsional..." value="${item.note}"
+              onchange="updateNilaiNote('${student}', this.value)"
+              class="w-full bg-slate-50 border border-slate-200 text-xs rounded-xl px-3 py-2 text-slate-700 focus:outline-none focus:border-brandPrimary">
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      calculateAvgNilai();
+    }
+
+    function updateNilaiScore(student, val) {
+      let num = parseInt(val) || 0;
+      if (num < 0) num = 0;
+      if (num > 100) num = 100;
+      nilaiData[student].score = num;
+      calculateAvgNilai();
+    }
+
+    function updateNilaiNote(student, text) {
+      nilaiData[student].note = text;
+    }
+
+    function quickFillNilai(val) {
+      STUDENTS.forEach(s => {
+        nilaiData[s].score = val;
+      });
+      renderNilaiList();
+    }
+
+    function calculateAvgNilai() {
+      let sum = 0;
+      STUDENTS.forEach(s => {
+        sum += (nilaiData[s].score || 0);
+      });
+      const avg = (sum / STUDENTS.length).toFixed(1);
+      const badge = document.getElementById('avgNilaiBadge');
+      if (badge) badge.innerText = avg;
+    }
+
+    // ==================== SUBMIT TO GOOGLE SPREADSHEET ====================
+    async function submitData(type) {
+      if (!scriptUrl) {
+        alert('URL Google Apps Script belum dikonfigurasi! Silakan masukkan Web App URL di Pengaturan.');
+        openConfigModal();
+        return;
+      }
+
+      const mapel = document.getElementById('selectMapel').value;
+      const tanggal = document.getElementById('inputTanggal').value;
+
+      let payload = {
+        type: type,
+        mapel: mapel,
+        tanggal: tanggal,
+        records: []
+      };
+
+      if (type === 'absensi') {
+        STUDENTS.forEach(s => {
+          payload.records.push({
+            nama: s,
+            status: absensiData[s] || 'Hadir'
+          });
+        });
+      } else {
+        let kategoriText = 'Latihan Harian';
+        if (currentSubModul === 'akhirBab') kategoriText = 'Latihan Akhir Bab';
+        if (currentSubModul === 'ulangan') kategoriText = 'Ulangan Harian';
+        if (currentSubModul === 'sts') kategoriText = 'Sumatif Tengah Semester (STS)';
+        if (currentSubModul === 'sas') kategoriText = 'Sumatif Akhir Semester (SAS)';
+
+        payload.kategori = kategoriText;
+
+        STUDENTS.forEach(s => {
+          payload.records.push({
+            nama: s,
+            nilai: nilaiData[s].score || 0,
+            catatan: nilaiData[s].note || ''
+          });
+        });
+      }
+
+      // Show Loading Notification
+      const btn = event.currentTarget;
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Mengirim...</span>`;
+
+      try {
+        const res = await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors', // standard Apps Script POST
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        alert(`Data ${type.toUpperCase()} (${mapel}) berhasil dikirim ke Google Spreadsheet!`);
+      } catch (err) {
+        console.error(err);
+        alert('Gagal mengirim data. Pastikan URL Apps Script benar dan terkoneksi internet.');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
+    }
+
+    // ==================== NAVIGATION MAIN TAB ====================
+    function switchMainTab(tabKey) {
+      const tabHome = document.getElementById('tabHome');
+      const tabSettings = document.getElementById('tabSettings');
+      const navHome = document.getElementById('navHome');
+      const navSettings = document.getElementById('navSettings');
+
+      if (tabKey === 'home') {
+        tabHome.classList.remove('hidden');
+        tabSettings.classList.add('hidden');
+        navHome.className = "flex flex-col items-center gap-1 text-brandPrimary font-bold text-xs py-1 px-4";
+        navSettings.className = "flex flex-col items-center gap-1 text-slate-400 hover:text-brandPrimary font-semibold text-xs py-1 px-4";
+      } else {
+        tabHome.classList.add('hidden');
+        tabSettings.classList.remove('hidden');
+        navHome.className = "flex flex-col items-center gap-1 text-slate-400 hover:text-brandPrimary font-semibold text-xs py-1 px-4";
+        navSettings.className = "flex flex-col items-center gap-1 text-brandPrimary font-bold text-xs py-1 px-4";
+      }
+    }
+
+    // ==================== SETTINGS & CONFIG MODAL ====================
+    function saveProfileSettings(e) {
+      e.preventDefault();
+      currentGuruName = document.getElementById('settingNamaGuru').value.trim();
+      authUser = document.getElementById('settingUsername').value.trim();
+      authPass = document.getElementById('settingPassword').value.trim();
+      scriptUrl = document.getElementById('settingScriptUrl').value.trim();
+
+      localStorage.setItem('guruName', currentGuruName);
+      localStorage.setItem('authUser', authUser);
+      localStorage.setItem('authPass', authPass);
+      localStorage.setItem('scriptUrl', scriptUrl);
+
+      updateClockAndGreeting();
+      updateScriptStatusUI();
+      alert('Pengaturan profil dan URL berhasil disimpan!');
+    }
+
+    function openConfigModal() {
+      document.getElementById('modalScriptUrlInput').value = scriptUrl;
+      document.getElementById('configModal').classList.remove('hidden');
+    }
+
+    function closeConfigModal() {
+      document.getElementById('configModal').classList.add('hidden');
+    }
+
+    function saveModalScriptUrl() {
+      const val = document.getElementById('modalScriptUrlInput').value.trim();
+      scriptUrl = val;
+      localStorage.setItem('scriptUrl', scriptUrl);
+      document.getElementById('settingScriptUrl').value = scriptUrl;
+      updateScriptStatusUI();
+      closeConfigModal();
+      alert('URL Google Apps Script berhasil dikonfigurasi!');
+    }
+
+    function updateScriptStatusUI() {
+      const elem = document.getElementById('scriptStatusText');
+      if (scriptUrl) {
+        elem.innerText = "Tersambung";
+        elem.className = "text-emerald-700 font-bold truncate max-w-[150px]";
+      } else {
+        elem.innerText = "Belum Diatur";
+        elem.className = "text-amber-600 font-bold truncate max-w-[150px]";
+      }
+    }
+  </script>
+</body>
+</html>
