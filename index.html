@@ -79,7 +79,8 @@
       
       <!-- CONTROLS & TAB NAVIGATION -->
       <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center">
-        <div class="w-full md:w-1/2" id="mapelContainer">
+        <!-- Wadah Dropdown Mapel (Default HIDDEN/Tersembunyi pas di Absensi) -->
+        <div class="w-full md:w-1/2 hidden" id="mapelContainer">
           <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Pilih Mata Pelajaran</label>
           <select id="selectMapel" class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-50 font-semibold text-gray-800 focus:ring-2 focus:ring-brandPrimary text-sm">
             <option value="BAHASA ARAB">BAHASA ARAB</option>
@@ -93,9 +94,9 @@
           </select>
         </div>
 
-        <div class="w-full md:w-auto flex bg-gray-100 p-1 rounded-lg border border-gray-200">
+        <div class="w-full md:w-auto flex bg-gray-100 p-1 rounded-lg border border-gray-200 ml-auto">
           <button onclick="switchTab('absen')" id="tabBtnAbsen" class="px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 bg-brandPrimary text-white shadow">
-            <i class="fa-solid fa-clipboard-user"></i> Absensi
+            <i class="fa-solid fa-clipboard-user"></i> Absensi Siswa
           </button>
           <button onclick="switchTab('nilai')" id="tabBtnNilai" class="px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 text-gray-600">
             <i class="fa-solid fa-pen-to-square"></i> Input Nilai
@@ -109,13 +110,13 @@
         <button onclick="closeAlert()" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- TAB 1: ABSENSI (HANYA TANGGAL) -->
+      <!-- TAB 1: ABSENSI (TANPA MAPEL) -->
       <div id="panelAbsensi" class="space-y-4">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-4 bg-gray-50 border-b flex justify-between items-center">
             <div>
               <h3 class="font-bold text-gray-800 text-sm">Presensi Harian Siswa</h3>
-              <p class="text-xs text-gray-500">Pencatatan presensi berdasarkan tanggal saja</p>
+              <p class="text-xs text-gray-500">Pencatatan presensi berdasarkan tanggal harian</p>
             </div>
             <button onclick="setAllAbsen('Hadir')" class="px-3 py-1.5 bg-green-100 text-green-700 rounded text-xs font-semibold">
               <i class="fa-solid fa-check-double"></i> Set Semua Hadir
@@ -132,7 +133,7 @@
         </div>
       </div>
 
-      <!-- TAB 2: INPUT NILAI (MATRIKS FORMAT SAMA DENGAN EXCEL) -->
+      <!-- TAB 2: INPUT NILAI (ADA MAPEL) -->
       <div id="panelNilai" class="hidden space-y-4">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-4 bg-gray-50 border-b flex flex-col sm:flex-row justify-between gap-3">
@@ -241,6 +242,8 @@
     function showDashboard() {
       document.getElementById('loginPortal').classList.add('hidden');
       document.getElementById('mainDashboard').classList.remove('hidden');
+      // Pastikan default masuk ke tab Absen dan Mapel tersembunyi
+      switchTab('absen');
     }
 
     function logout() { sessionStorage.removeItem('isLoggedIn'); location.reload(); }
@@ -253,7 +256,7 @@
           <div class="flex gap-1">
             ${['Hadir', 'Izin', 'Sakit', 'Alpa'].map(st => `
               <label><input type="radio" name="absen_${idx}" value="${st}" ${st==='Hadir'?'checked':''} class="peer hidden">
-              <span class="px-2 py-1 rounded border text-gray-600 peer-checked:bg-brandPrimary peer-checked:text-white">${st}</span></label>
+              <span class="px-2 py-1 rounded border text-gray-600 peer-checked:bg-brandPrimary peer-checked:text-white cursor-pointer">${st}</span></label>
             `).join('')}
           </div>
         </div>
@@ -313,13 +316,25 @@
       document.getElementById('panelAbsensi').classList.add('hidden');
       document.getElementById('panelNilai').classList.add('hidden');
       document.getElementById('panelPengaturan').classList.add('hidden');
+      
+      // Sembunyikan dropdown Mapel secara default
       document.getElementById('mapelContainer').classList.add('hidden');
 
-      if (tab === 'absen') document.getElementById('panelAbsensi').classList.remove('hidden');
-      else if (tab === 'nilai') {
+      // Reset style tombol tab
+      document.getElementById('tabBtnAbsen').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 text-gray-600";
+      document.getElementById('tabBtnNilai').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 text-gray-600";
+
+      if (tab === 'absen') {
+        document.getElementById('panelAbsensi').classList.remove('hidden');
+        document.getElementById('tabBtnAbsen').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 bg-brandPrimary text-white shadow";
+      } else if (tab === 'nilai') {
         document.getElementById('panelNilai').classList.remove('hidden');
+        // Tampilkan dropdown Mapel HANYA pas masuk Tab Nilai
         document.getElementById('mapelContainer').classList.remove('hidden');
-      } else if (tab === 'pengaturan') document.getElementById('panelPengaturan').classList.remove('hidden');
+        document.getElementById('tabBtnNilai').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 bg-brandPrimary text-white shadow";
+      } else if (tab === 'pengaturan') {
+        document.getElementById('panelPengaturan').classList.remove('hidden');
+      }
     }
 
     function openModalSettings() { document.getElementById('modalSettings').classList.remove('hidden'); }
