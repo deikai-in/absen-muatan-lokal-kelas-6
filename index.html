@@ -77,9 +77,9 @@
     <!-- BODY CONTENT -->
     <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-1">
       
-      <!-- CONTROLS & TAB NAVIGATION -->
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center">
-        <!-- Wadah Dropdown Mapel (Default HIDDEN/Tersembunyi pas di Absensi) -->
+      <!-- WADAH UTAMA TAB / SWITCHER (OTOMATIS SEMBUNYI SAAT MASUK PENGATURAN) -->
+      <div id="topControlPanel" class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center">
+        <!-- Dropdown Mapel (Hanya Tampil Saat Tab Nilai Aktif) -->
         <div class="w-full md:w-1/2 hidden" id="mapelContainer">
           <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Pilih Mata Pelajaran</label>
           <select id="selectMapel" class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-50 font-semibold text-gray-800 focus:ring-2 focus:ring-brandPrimary text-sm">
@@ -110,7 +110,7 @@
         <button onclick="closeAlert()" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- TAB 1: ABSENSI (TANPA MAPEL) -->
+      <!-- TAB 1: ABSENSI -->
       <div id="panelAbsensi" class="space-y-4">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-4 bg-gray-50 border-b flex justify-between items-center">
@@ -133,7 +133,7 @@
         </div>
       </div>
 
-      <!-- TAB 2: INPUT NILAI (ADA MAPEL) -->
+      <!-- TAB 2: INPUT NILAI -->
       <div id="panelNilai" class="hidden space-y-4">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-4 bg-gray-50 border-b flex flex-col sm:flex-row justify-between gap-3">
@@ -162,29 +162,59 @@
         </div>
       </div>
 
-      <!-- TAB 3: PENGATURAN -->
+      <!-- TAB 3: PENGATURAN (LENGKAP DENGAN FORM UBAH PROFIL) -->
       <div id="panelPengaturan" class="hidden max-w-xl mx-auto space-y-6">
-        <div class="bg-white rounded-xl p-6 shadow-sm border">
-          <h3 class="font-bold text-gray-800 mb-4 border-b pb-2"><i class="fa-solid fa-gear text-brandPrimary"></i> Pengaturan Akun & Apps Script</h3>
-          <button onclick="openModalSettings()" class="w-full bg-red-50 text-brandPrimary border border-brandPrimary p-3 rounded-lg text-xs font-bold mb-4">
+        <div class="bg-white rounded-xl p-6 shadow-sm border space-y-4">
+          <h3 class="font-bold text-gray-800 border-b pb-3 flex items-center gap-2">
+            <i class="fa-solid fa-user-gear text-brandPrimary"></i> Ubah Profil & Akun Guru
+          </h3>
+          
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Guru (Panggilan)</label>
+            <input type="text" id="profNama" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-brandPrimary">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Username Login</label>
+              <input type="text" id="profUser" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-brandPrimary">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Password Baru</label>
+              <input type="password" id="profPass" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-brandPrimary">
+            </div>
+          </div>
+
+          <button onclick="saveProfile()" class="w-full bg-gray-800 hover:bg-black text-white font-bold py-2.5 rounded-lg text-xs transition">
+            Simpan Perubahan Akun
+          </button>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-sm border space-y-4">
+          <h3 class="font-bold text-gray-800 border-b pb-3 flex items-center gap-2">
+            <i class="fa-solid fa-plug text-brandPrimary"></i> Pengaturan Integrasi
+          </h3>
+          <button onclick="openModalSettings()" class="w-full bg-red-50 text-brandPrimary border border-brandPrimary hover:bg-brandPrimary hover:text-white font-bold py-2.5 rounded-lg text-xs transition">
             Atur / Ubah URL Google Apps Script
           </button>
-          <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg text-xs font-bold shadow">
-            Logout
+          <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-lg text-xs shadow transition">
+            Logout (Keluar Aplikasi)
           </button>
         </div>
       </div>
 
     </main>
 
-    <!-- BOTTOM NAV (MOBILE) -->
-    <footer class="bg-white border-t fixed bottom-0 inset-x-0 z-40 sm:relative sm:bg-gray-800 sm:text-white">
-      <div class="max-w-7xl mx-auto px-4 py-2 flex justify-around sm:justify-between text-xs">
-        <button onclick="switchTab('absen')" class="flex flex-col items-center text-brandPrimary font-bold">
-          <i class="fa-solid fa-house"></i> Home
+    <!-- FOOTER NAVIGASI BAWAH (WARNA ABU-ABU TERANG & KONTRAS) -->
+    <footer class="bg-slate-900 border-t border-slate-800 fixed bottom-0 inset-x-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 py-2.5 flex justify-around text-xs">
+        <button onclick="switchTab('absen')" id="navHomeBtn" class="flex flex-col items-center font-semibold text-slate-400 hover:text-white transition">
+          <i class="fa-solid fa-house text-base mb-0.5"></i>
+          <span class="text-[11px]">Home</span>
         </button>
-        <button onclick="switchTab('pengaturan')" class="flex flex-col items-center text-gray-400">
-          <i class="fa-solid fa-gear"></i> Pengaturan
+        <button onclick="switchTab('pengaturan')" id="navSettingsBtn" class="flex flex-col items-center font-semibold text-slate-400 hover:text-white transition">
+          <i class="fa-solid fa-gear text-base mb-0.5"></i>
+          <span class="text-[11px]">Pengaturan</span>
         </button>
       </div>
     </footer>
@@ -210,20 +240,32 @@
       "SITI IRTIA NAZIHA", "UMAR SYAFIQ HABIBY", "KAYYISA ANINDYA HANUM", "NAURA ZAKHYRA FAHRUL"
     ];
 
+    let currentUser = localStorage.getItem('app_user') || 'deikai';
+    let currentPass = localStorage.getItem('app_pass') || 'Dpa10416195';
+    let currentGuruName = localStorage.getItem('app_guru') || 'Pak Diki';
     let scriptUrl = localStorage.getItem('app_script_url') || '';
 
     document.addEventListener('DOMContentLoaded', () => {
-      initClock();
+      initClockAndGreeting();
       renderSiswaAbsenList();
       renderSiswaNilaiList();
+      loadProfileFields();
       if (sessionStorage.getItem('isLoggedIn') === 'true') showDashboard();
     });
 
-    function initClock() {
+    function initClockAndGreeting() {
       const update = () => {
         const now = new Date();
         document.getElementById('displayClock').innerText = now.toLocaleTimeString('id-ID');
         document.getElementById('displayDate').innerText = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+        
+        const hour = now.getHours();
+        let greeting = "Selamat Pagi";
+        if (hour >= 11 && hour < 15) greeting = "Selamat Siang";
+        else if (hour >= 15 && hour < 18) greeting = "Selamat Sore";
+        else if (hour >= 18 || hour < 4) greeting = "Selamat Malam";
+
+        document.getElementById('greetingText').innerText = `${greeting} ${currentGuruName}, Semoga Harimu Selalu Menyenangkan`;
       };
       update();
       setInterval(update, 1000);
@@ -231,7 +273,7 @@
 
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      if (document.getElementById('inputUsername').value === 'deikai' && document.getElementById('inputPassword').value === 'Dpa10416195') {
+      if (document.getElementById('inputUsername').value === currentUser && document.getElementById('inputPassword').value === currentPass) {
         sessionStorage.setItem('isLoggedIn', 'true');
         showDashboard();
       } else {
@@ -242,7 +284,6 @@
     function showDashboard() {
       document.getElementById('loginPortal').classList.add('hidden');
       document.getElementById('mainDashboard').classList.remove('hidden');
-      // Pastikan default masuk ke tab Absen dan Mapel tersembunyi
       switchTab('absen');
     }
 
@@ -317,24 +358,49 @@
       document.getElementById('panelNilai').classList.add('hidden');
       document.getElementById('panelPengaturan').classList.add('hidden');
       
-      // Sembunyikan dropdown Mapel secara default
+      document.getElementById('topControlPanel').classList.remove('hidden');
       document.getElementById('mapelContainer').classList.add('hidden');
 
-      // Reset style tombol tab
-      document.getElementById('tabBtnAbsen').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 text-gray-600";
-      document.getElementById('tabBtnNilai').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 text-gray-600";
+      // Styling Tombol Navigasi Bawah (Abu-abu terang untuk tidak aktif, Putih untuk aktif)
+      document.getElementById('navHomeBtn').className = "flex flex-col items-center font-semibold text-slate-400 hover:text-white transition";
+      document.getElementById('navSettingsBtn').className = "flex flex-col items-center font-semibold text-slate-400 hover:text-white transition";
 
       if (tab === 'absen') {
         document.getElementById('panelAbsensi').classList.remove('hidden');
         document.getElementById('tabBtnAbsen').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 bg-brandPrimary text-white shadow";
+        document.getElementById('tabBtnNilai').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 text-gray-600";
+        document.getElementById('navHomeBtn').className = "flex flex-col items-center font-bold text-white transition";
       } else if (tab === 'nilai') {
         document.getElementById('panelNilai').classList.remove('hidden');
-        // Tampilkan dropdown Mapel HANYA pas masuk Tab Nilai
         document.getElementById('mapelContainer').classList.remove('hidden');
+        document.getElementById('tabBtnAbsen').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 text-gray-600";
         document.getElementById('tabBtnNilai').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 bg-brandPrimary text-white shadow";
+        document.getElementById('navHomeBtn').className = "flex flex-col items-center font-bold text-white transition";
       } else if (tab === 'pengaturan') {
         document.getElementById('panelPengaturan').classList.remove('hidden');
+        // Sembunyikan panel kontrol switcher atas sepenuhnya saat di Pengaturan
+        document.getElementById('topControlPanel').classList.add('hidden');
+        document.getElementById('navSettingsBtn').className = "flex flex-col items-center font-bold text-white transition";
       }
+    }
+
+    function loadProfileFields() {
+      document.getElementById('profNama').value = currentGuruName;
+      document.getElementById('profUser').value = currentUser;
+      document.getElementById('profPass').value = currentPass;
+    }
+
+    function saveProfile() {
+      currentGuruName = document.getElementById('profNama').value.trim();
+      currentUser = document.getElementById('profUser').value.trim();
+      currentPass = document.getElementById('profPass').value.trim();
+
+      localStorage.setItem('app_guru', currentGuruName);
+      localStorage.setItem('app_user', currentUser);
+      localStorage.setItem('app_pass', currentPass);
+
+      initClockAndGreeting();
+      alert("Profil dan kredensial login berhasil diperbarui!");
     }
 
     function openModalSettings() { document.getElementById('modalSettings').classList.remove('hidden'); }
