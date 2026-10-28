@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aplikasi Web Absen dan Nilai Muatan Lokal</title>
+  <title>Absen dan Nilai Muatan Lokal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -29,35 +29,29 @@
       transform: scale(1.02);
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-    .islamic-pattern {
-      background-color: #111622;
-      background-image: radial-gradient(#1e293b 0.75px, transparent 0.75px), radial-gradient(#1e293b 0.75px, #111622 0.75px);
-      background-size: 30px 30px;
-      background-position: 0 0, 15px 15px;
+    
+    /* Clean Dots Background Pattern (Hanya Titik-Titik Rapi) */
+    .dots-pattern {
+      background-color: #0f172a;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+      background-size: 20px 20px;
     }
   </style>
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col pb-24 md:pb-0">
 
-  <!-- ================= PORTAL LOGIN (GAYA ELEGANT ISLAMI DARK THEME) ================= -->
-  <div id="loginPortal" class="fixed inset-0 z-50 loginBg islamic-pattern flex flex-col justify-between items-center overflow-y-auto px-4 py-8">
+  <!-- ================= PORTAL LOGIN (CLEAN DOTS DARK UI) ================= -->
+  <div id="loginPortal" class="fixed inset-0 z-50 dots-pattern flex flex-col justify-between items-center overflow-y-auto px-4 py-8">
     
-    <!-- Ornamen Top-Right Corner SVG Background -->
-    <div class="absolute top-0 right-0 w-64 h-64 opacity-10 pointer-events-none">
-      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-full fill-white">
-        <path d="M100 0 L120 40 L160 20 L140 60 L180 80 L140 100 L180 120 L140 140 L160 180 L120 160 L100 200 L80 160 L40 180 L60 140 L20 120 L60 100 L20 80 L60 60 L40 20 L80 40 Z" />
-      </svg>
-    </div>
-
-    <div></div><!-- Spacer -->
+    <div></div><!-- Spacer Top -->
 
     <!-- Form & Logo Container -->
-    <div class="w-full max-w-sm my-auto text-center z-10 space-y-6">
+    <div class="w-full max-w-sm my-auto text-center z-10 space-y-6 bg-slate-900/80 p-8 rounded-3xl border border-slate-800 shadow-2xl backdrop-blur-md">
       
       <!-- LOGO ABSENSI -->
-      <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-900/80 border border-slate-700/60 shadow-2xl relative mb-1">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-slate-800 border border-slate-700/80 shadow-xl relative mb-1">
         <i class="fa-regular fa-clock text-white text-3xl"></i>
-        <div class="absolute bottom-1 right-1 w-7 h-7 bg-brandPrimary rounded-full flex items-center justify-center text-white text-xs border-2 border-slate-900 shadow">
+        <div class="absolute -bottom-1 -right-1 w-7 h-7 bg-brandPrimary rounded-lg flex items-center justify-center text-white text-xs border-2 border-slate-900 shadow">
           <i class="fa-solid fa-user"></i>
         </div>
       </div>
@@ -65,8 +59,8 @@
       <!-- TITLE & SUBTITLE -->
       <div class="space-y-1.5">
         <h2 class="text-3xl font-extrabold text-white tracking-tight">Absensi</h2>
-        <p class="text-sm font-semibold tracking-widest text-slate-400 uppercase">Portal Masuk</p>
-        <p class="text-xs text-slate-400/90 font-medium pt-2">Disiplin Hari Ini,<br>Untuk Masa Depan yang Lebih Baik</p>
+        <p class="text-xs font-bold tracking-widest text-slate-400 uppercase">SDS IT Assa'adah</p>
+        <p class="text-xs text-slate-400 font-medium pt-2">Disiplin Hari Ini,<br>Untuk Masa Depan yang Lebih Baik</p>
       </div>
 
       <!-- FORM LOGIN -->
@@ -76,7 +70,7 @@
           <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
             <i class="fa-solid fa-user text-sm"></i>
           </span>
-          <input type="text" id="inputUsername" required class="w-full pl-11 pr-4 py-3 bg-slate-900/80 border border-slate-700/80 rounded-2xl text-sm font-medium text-white placeholder-slate-500 focus:outline-none focus:border-brandPrimary focus:ring-1 focus:ring-brandPrimary transition shadow-inner" placeholder="Username / NIP">
+          <input type="text" id="inputUsername" required class="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-700/80 rounded-xl text-sm font-medium text-white placeholder-slate-500 focus:outline-none focus:border-brandPrimary focus:ring-1 focus:ring-brandPrimary transition shadow-inner" placeholder="Username / NIP">
         </div>
 
         <!-- Input Password with Eye Toggle -->
@@ -84,7 +78,7 @@
           <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
             <i class="fa-solid fa-lock text-sm"></i>
           </span>
-          <input type="password" id="inputPassword" required class="w-full pl-11 pr-11 py-3 bg-slate-900/80 border border-slate-700/80 rounded-2xl text-sm font-medium text-white placeholder-slate-500 focus:outline-none focus:border-brandPrimary focus:ring-1 focus:ring-brandPrimary transition shadow-inner" placeholder="Password">
+          <input type="password" id="inputPassword" required class="w-full pl-11 pr-11 py-3 bg-slate-950 border border-slate-700/80 rounded-xl text-sm font-medium text-white placeholder-slate-500 focus:outline-none focus:border-brandPrimary focus:ring-1 focus:ring-brandPrimary transition shadow-inner" placeholder="Password">
           <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-white transition">
             <i id="eyeIcon" class="fa-solid fa-eye text-sm"></i>
           </button>
@@ -96,7 +90,7 @@
         </div>
 
         <!-- Button Masuk -->
-        <button type="submit" class="w-full bg-brandPrimary hover:bg-brandDark text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-red-950/50 hover:shadow-xl transition duration-200 flex items-center justify-center gap-2.5 text-sm mt-2">
+        <button type="submit" class="w-full bg-brandPrimary hover:bg-brandDark text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-950/50 hover:shadow-xl transition duration-200 flex items-center justify-center gap-2.5 text-sm mt-2">
           <i class="fa-solid fa-right-to-bracket"></i>
           <span>Masuk</span>
         </button>
@@ -104,13 +98,7 @@
 
     </div>
 
-    <!-- Bottom Mosque/School Silhouette Accent & Red Curve Line -->
-    <div class="w-full max-w-sm mt-6 relative z-0 pointer-events-none opacity-40">
-      <svg viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-        <path d="M0,90 Q250,130 500,70 L500,120 L0,120 Z" fill="#990909" />
-        <path d="M0,100 Q250,135 500,80 L500,120 L0,120 Z" fill="#0b0f17" />
-      </svg>
-    </div>
+    <div></div><!-- Spacer Bottom -->
 
   </div>
 
@@ -125,7 +113,7 @@
             <i class="fa-solid fa-school"></i>
           </div>
           <div>
-            <h1 class="text-base sm:text-lg font-bold leading-snug">Aplikasi Absen & Nilai Muatan Lokal</h1>
+            <h1 class="text-base sm:text-lg font-bold leading-snug">Absen & Nilai Muatan Lokal</h1>
             <div class="flex items-center gap-2 text-xs text-red-100 font-medium">
               <span>SDS IT Assa’adah</span>
               <span>•</span>
@@ -153,7 +141,7 @@
         <div class="max-w-7xl mx-auto flex justify-between items-center">
           <span id="greetingText" class="font-medium text-red-100 flex items-center gap-2">
             <i class="fa-solid fa-sun text-yellow-300"></i>
-            <span>Selamat Pagi Pak Diki, Semoga Harimu Selalu Menyenangkan</span>
+            <span>Selamat Pagi Pak Diki, Semoga Hari ini Menyenangkan</span>
           </span>
           <span class="hidden sm:inline-block text-white/50 text-[11px]">Tahun Ajaran 2026/2027</span>
         </div>
@@ -432,7 +420,6 @@
       setInterval(update, 1000);
     }
 
-    // TOGGLE VISIBILITAS PASSWORD (EYE ICON)
     function togglePasswordVisibility() {
       const passInput = document.getElementById('inputPassword');
       const eyeIcon = document.getElementById('eyeIcon');
