@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aplikasi Web Absen dan Nilai Muatan Lokal</title>
+  <title>Absen dan Nilai Muatan Lokal Kelas 6 SD</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -14,42 +14,66 @@
         extend: {
           colors: {
             brandPrimary: '#990909',
-            brandDark: '#750606',
-            brandSecondary: '#8A8A8A'
+            brandDark: '#6b0505',
+            brandAccent: '#e31b1b',
+            brandBg: '#f8fafc'
           },
-          fontFamily: { sans: ['Inter', 'sans-serif'] }
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
         }
       }
     }
   </script>
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+    .status-radio:checked + span {
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans text-gray-800 min-h-screen flex flex-col pb-20 md:pb-0">
+<body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col pb-24 md:pb-0">
 
   <!-- ================= PORTAL LOGIN ================= -->
-  <div id="loginPortal" class="fixed inset-0 z-50 bg-gray-900 bg-opacity-95 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 border-t-8 border-brandPrimary">
-      <div class="text-center mb-6">
-        <div class="w-16 h-16 bg-red-100 text-brandPrimary rounded-full flex items-center justify-center mx-auto mb-3">
-          <i class="fa-solid fa-user-shield text-3xl"></i>
+  <div id="loginPortal" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 border-t-8 border-brandPrimary relative overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-red-100 rounded-full blur-2xl"></div>
+      
+      <div class="text-center mb-8 relative z-10">
+        <div class="w-20 h-20 bg-gradient-to-tr from-brandPrimary to-brandAccent text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-red-900/20 transform -rotate-3">
+          <i class="fa-solid fa-graduation-cap text-4xl"></i>
         </div>
-        <h2 class="text-2xl font-bold text-gray-800">Portal Masuk Guru</h2>
-        <p class="text-xs text-gray-500 mt-1">SDS IT Assa’adah - Muatan Lokal Kelas 6</p>
+        <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Absensi</h2>
+        <p class="text-xs font-medium text-slate-500 mt-1">SDS IT Assa’adah • Kelas 6</p>
       </div>
 
-      <form id="loginForm" class="space-y-4">
+      <form id="loginForm" class="space-y-5 relative z-10">
         <div>
-          <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Username</label>
-          <input type="text" id="inputUsername" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brandPrimary" placeholder="Masukkan Username">
+          <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Username</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <i class="fa-solid fa-user"></i>
+            </span>
+            <input type="text" id="inputUsername" required class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-brandPrimary focus:bg-white transition" placeholder="Masukkan Username">
+          </div>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Password</label>
-          <input type="password" id="inputPassword" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brandPrimary" placeholder="••••••••">
+          <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <i class="fa-solid fa-lock"></i>
+            </span>
+            <input type="password" id="inputPassword" required class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-brandPrimary focus:bg-white transition" placeholder="••••••••">
+          </div>
         </div>
-        <div id="loginError" class="text-red-600 text-xs text-center font-medium hidden bg-red-50 py-2 rounded border border-red-200">
-          Username atau Password salah!
+        <div id="loginError" class="text-red-600 text-xs text-center font-semibold hidden bg-red-50 py-2.5 rounded-xl border border-red-200">
+          <i class="fa-solid fa-circle-exclamation mr-1"></i> Username atau Password salah!
         </div>
-        <button type="submit" class="w-full bg-brandPrimary hover:bg-brandDark text-white font-semibold py-3 rounded-lg shadow transition">
-          Login <i class="fa-solid fa-arrow-right ml-1"></i>
+        <button type="submit" class="w-full bg-gradient-to-r from-brandPrimary to-brandDark hover:from-brandDark hover:to-black text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-950/20 hover:shadow-xl transition duration-200 flex items-center justify-center gap-2">
+          <span>Masuk</span>
+          <i class="fa-solid fa-arrow-right"></i>
         </button>
       </form>
     </div>
@@ -59,144 +83,245 @@
   <div id="mainDashboard" class="hidden flex-1 flex flex-col">
     
     <!-- HEADER / NAVBAR -->
-    <header class="bg-brandPrimary text-white shadow-lg sticky top-0 z-30">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-2">
-        <div>
-          <h1 class="text-base sm:text-lg font-bold">Aplikasi Web Absen dan Nilai Muatan Lokal</h1>
-          <p class="text-xs text-red-100">SDS IT Assa’adah • Kelas 6 SD</p>
+    <header class="bg-gradient-to-r from-brandDark via-brandPrimary to-brandDark text-white shadow-xl sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <div class="flex items-center space-x-3 w-full sm:w-auto">
+          <div class="w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center font-extrabold text-xl border border-white/20 backdrop-blur-sm shadow-inner">
+            <i class="fa-solid fa-school"></i>
+          </div>
+          <div>
+            <h1 class="text-base sm:text-lg font-bold leading-snug">Aplikasi Absen & Nilai Muatan Lokal</h1>
+            <div class="flex items-center gap-2 text-xs text-red-100 font-medium">
+              <span>SDS IT Assa’adah</span>
+              <span>•</span>
+              <span class="bg-white/20 px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-bold">Kelas 6 SD</span>
+            </div>
+          </div>
         </div>
-        <div class="flex items-center space-x-4 text-xs bg-brandDark/50 px-3 py-1.5 rounded-lg border border-white/10">
-          <span id="displayDate"></span> • <span id="displayClock" class="font-bold font-mono"></span>
+
+        <!-- Clock & Calendar Display -->
+        <div class="flex items-center space-x-3 text-xs bg-black/20 px-3.5 py-2 rounded-xl border border-white/10 backdrop-blur-md w-full sm:w-auto justify-between sm:justify-end">
+          <div class="flex items-center space-x-2">
+            <i class="fa-regular fa-calendar-check text-red-200"></i>
+            <span id="displayDate" class="font-medium"></span>
+          </div>
+          <div class="h-3 w-px bg-white/20"></div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-regular fa-clock text-red-200"></i>
+            <span id="displayClock" class="font-bold font-mono tracking-wider"></span>
+          </div>
         </div>
       </div>
-      <div class="bg-brandDark px-4 py-2 text-xs border-t border-white/10 flex justify-between">
-        <span id="greetingText" class="font-medium text-red-100 italic">Selamat Pagi Pak Diki</span>
+
+      <!-- Welcome Banner -->
+      <div class="bg-black/30 px-4 py-2 text-xs border-t border-white/10 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+          <span id="greetingText" class="font-medium text-red-100 flex items-center gap-2">
+            <i class="fa-solid fa-sun text-yellow-300"></i>
+            <span>Selamat Pagi Pak Diki, Semoga Harimu Selalu Menyenangkan</span>
+          </span>
+          <span class="hidden sm:inline-block text-white/50 text-[11px]">Tahun Ajaran 2026/2027</span>
+        </div>
       </div>
     </header>
 
     <!-- BODY CONTENT -->
-    <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-1">
+    <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-1 space-y-6">
       
-      <!-- WADAH UTAMA TAB / SWITCHER -->
-      <div id="topControlPanel" class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center">
+      <!-- CONTROLS & TAB NAVIGATION -->
+      <div id="topControlPanel" class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col md:flex-row gap-4 justify-between items-center">
+        <!-- Dropdown Mapel (Hanya Tampil Saat Tab Nilai Aktif) -->
         <div class="w-full md:w-1/2 hidden" id="mapelContainer">
-          <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Pilih Mata Pelajaran</label>
-          <select id="selectMapel" class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-50 font-semibold text-gray-800 focus:ring-2 focus:ring-brandPrimary text-sm">
-            <option value="BAHASA ARAB">BAHASA ARAB</option>
-            <option value="BAHASA INGGRIS">BAHASA INGGRIS</option>
-            <option value="SEJARAH KEBUDAYAAN ISLAM">SEJARAH KEBUDAYAAN ISLAM</option>
-            <option value="AL-QUR’AN DAN HADIST">AL-QUR’AN DAN HADIST</option>
-            <option value="AKIDAH AKHLAK">AKIDAH AKHLAK</option>
-            <option value="KODING">KODING</option>
-            <option value="PENDIDIKAN JASMANI DAN ROHANI">PENDIDIKAN JASMANI DAN ROHANI</option>
-            <option value="PENDIDIKAN AGAMA ISLAM">PENDIDIKAN AGAMA ISLAM</option>
-          </select>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Mata Pelajaran</label>
+          <div class="relative">
+            <select id="selectMapel" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50 font-bold text-slate-800 focus:ring-2 focus:ring-brandPrimary focus:bg-white text-sm appearance-none pr-10 transition">
+              <option value="BAHASA ARAB">BAHASA ARAB</option>
+              <option value="BAHASA INGGRIS">BAHASA INGGRIS</option>
+              <option value="SEJARAH KEBUDAYAAN ISLAM">SEJARAH KEBUDAYAAN ISLAM</option>
+              <option value="AL-QUR’AN DAN HADIST">AL-QUR’AN DAN HADIST</option>
+              <option value="AKIDAH AKHLAK">AKIDAH AKHLAK</option>
+              <option value="KODING">KODING</option>
+              <option value="PENDIDIKAN JASMANI DAN ROHANI">PENDIDIKAN JASMANI DAN ROHANI</option>
+              <option value="PENDIDIKAN AGAMA ISLAM">PENDIDIKAN AGAMA ISLAM</option>
+            </select>
+            <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </span>
+          </div>
         </div>
 
-        <div class="w-full md:w-auto flex bg-gray-100 p-1 rounded-lg border border-gray-200 ml-auto">
-          <button onclick="switchTab('absen')" id="tabBtnAbsen" class="px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 bg-brandPrimary text-white shadow">
-            <i class="fa-solid fa-clipboard-user"></i> Absensi Siswa
+        <div class="w-full md:w-auto flex bg-slate-100 p-1.5 rounded-xl border border-slate-200/60 ml-auto">
+          <button onclick="switchTab('absen')" id="tabBtnAbsen" class="px-5 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 bg-brandPrimary text-white shadow-md shadow-red-950/20">
+            <i class="fa-solid fa-clipboard-user text-sm"></i> Presensi Siswa
           </button>
-          <button onclick="switchTab('nilai')" id="tabBtnNilai" class="px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 text-gray-600">
-            <i class="fa-solid fa-pen-to-square"></i> Input Nilai
+          <button onclick="switchTab('nilai')" id="tabBtnNilai" class="px-5 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900">
+            <i class="fa-solid fa-pen-to-square text-sm"></i> Input Nilai
           </button>
         </div>
       </div>
 
       <!-- STATUS ALERT -->
-      <div id="statusAlert" class="hidden mb-6 p-4 rounded-xl border text-sm font-medium flex justify-between items-center">
+      <div id="statusAlert" class="hidden p-4 rounded-2xl border text-sm font-semibold flex justify-between items-center shadow-sm">
         <span id="alertMessage"></span>
-        <button onclick="closeAlert()" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="closeAlert()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- TAB 1: ABSENSI -->
-      <div id="panelAbsensi" class="space-y-4">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="p-4 bg-gray-50 border-b flex justify-between items-center">
-            <div>
-              <h3 class="font-bold text-gray-800 text-sm">Presensi Harian Siswa</h3>
-              <p class="text-xs text-gray-500">Pencatatan presensi berdasarkan tanggal harian</p>
+      <!-- TAB 1: ABSENSI SISWA -->
+      <div id="panelAbsensi" class="space-y-5">
+        
+        <!-- RINGKASAN STATISTIK PRESENSI (QUICK STATS CARDS) -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-users"></i>
             </div>
-            <button onclick="setAllAbsen('Hadir')" class="px-3 py-1.5 bg-green-100 text-green-700 rounded text-xs font-semibold">
-              <i class="fa-solid fa-check-double"></i> Set Semua Hadir
+            <div>
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Siswa</p>
+              <p class="text-lg font-extrabold text-slate-800">16</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-3.5 rounded-2xl border border-emerald-100 shadow-sm flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-user-check"></i>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Hadir</p>
+              <p class="text-lg font-extrabold text-emerald-700" id="statHadir">16</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-3.5 rounded-2xl border border-amber-100 shadow-sm flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-envelope-open-text"></i>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Izin</p>
+              <p class="text-lg font-extrabold text-amber-700" id="statIzin">0</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-3.5 rounded-2xl border border-sky-100 shadow-sm flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-notes-medical"></i>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-sky-600 uppercase tracking-wider">Sakit</p>
+              <p class="text-lg font-extrabold text-sky-700" id="statSakit">0</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-3.5 rounded-2xl border border-rose-100 shadow-sm flex items-center space-x-3 col-span-2 sm:col-span-1">
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-user-xmark"></i>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">Alpa</p>
+              <p class="text-lg font-extrabold text-rose-700" id="statAlpa">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAIN PRESENSI CARD -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+          <div class="p-4 sm:p-5 bg-slate-50/80 border-b border-slate-200/80 flex justify-between items-center">
+            <div>
+              <h3 class="font-extrabold text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                <i class="fa-solid fa-calendar-day text-brandPrimary"></i> Presensi Harian Siswa
+              </h3>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Pencatatan presensi berdasarkan tanggal harian</p>
+            </div>
+            <button onclick="setAllAbsen('Hadir')" class="px-3.5 py-2 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-xl text-xs font-bold transition border border-emerald-200 flex items-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-check-double"></i>
+              <span class="hidden sm:inline">Set Semua</span> Hadir
             </button>
           </div>
 
-          <div class="divide-y divide-gray-100 max-h-[60vh] overflow-y-auto" id="listSiswaAbsen"></div>
+          <!-- LIST SISWA ABSEN -->
+          <div class="p-3 sm:p-4 divide-y divide-slate-100 max-h-[60vh] overflow-y-auto space-y-2 sm:space-y-0" id="listSiswaAbsen"></div>
 
-          <div class="p-4 bg-gray-50 border-t flex justify-end">
-            <button onclick="submitAbsensi()" id="btnSaveAbsen" class="w-full sm:w-auto bg-brandPrimary hover:bg-brandDark text-white font-bold py-2.5 px-6 rounded-lg shadow transition">
-              <i class="fa-solid fa-floppy-disk"></i> Simpan Absensi
+          <div class="p-4 bg-slate-50/80 border-t border-slate-200/80 flex justify-end">
+            <button onclick="submitAbsensi()" id="btnSaveAbsen" class="w-full sm:w-auto bg-gradient-to-r from-brandPrimary to-brandDark hover:from-brandDark hover:to-black text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-red-950/20 transition flex items-center justify-center gap-2 text-sm">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Simpan Absensi ke Spreadsheet
             </button>
           </div>
         </div>
       </div>
 
       <!-- TAB 2: INPUT NILAI -->
-      <div id="panelNilai" class="hidden space-y-4">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="p-4 bg-gray-50 border-b flex flex-col sm:flex-row justify-between gap-3">
+      <div id="panelNilai" class="hidden space-y-5">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+          <div class="p-4 sm:p-5 bg-slate-50/80 border-b border-slate-200/80 flex flex-col sm:flex-row justify-between gap-4 sm:items-center">
             <div>
-              <h3 class="font-bold text-gray-800 text-sm">Lembar Input Nilai Siswa</h3>
-              <p class="text-xs text-gray-500">Nilai akan otomatis masuk ke Sheet khusus sesuai Mata Pelajaran</p>
+              <h3 class="font-extrabold text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                <i class="fa-solid fa-file-pen text-brandPrimary"></i> Lembar Input Nilai Siswa
+              </h3>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Nilai otomatis tersimpan di Sheet khusus Mata Pelajaran</p>
             </div>
+
             <div class="w-full sm:w-64">
-              <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Kategori Jenis Nilai</label>
-              <select id="selectJenisNilai" class="w-full border rounded-lg p-2 bg-white font-semibold text-xs text-brandPrimary">
-                <option value="NH">NH (Nilai Harian)</option>
-                <option value="NU">NU (Nilai Ulangan)</option>
-                <option value="STS">STS (Sumatif Tengah Semester)</option>
-                <option value="SAS">SAS (Sumatif Akhir Semester)</option>
-              </select>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Kategori Jenis Nilai</label>
+              <div class="relative">
+                <select id="selectJenisNilai" class="w-full border border-slate-200 rounded-xl p-2.5 bg-white font-bold text-xs text-brandPrimary focus:ring-2 focus:ring-brandPrimary appearance-none pr-8">
+                  <option value="NH">NH (Nilai Harian)</option>
+                  <option value="NU">NU (Nilai Ulangan)</option>
+                  <option value="STS">STS (Sumatif Tengah Semester)</option>
+                  <option value="SAS">SAS (Sumatif Akhir Semester)</option>
+                </select>
+                <span class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                  <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                </span>
+              </div>
             </div>
           </div>
 
-          <div class="divide-y divide-gray-100 max-h-[60vh] overflow-y-auto" id="listSiswaNilai"></div>
+          <!-- LIST SISWA NILAI -->
+          <div class="p-3 sm:p-4 divide-y divide-slate-100 max-h-[60vh] overflow-y-auto space-y-2 sm:space-y-0" id="listSiswaNilai"></div>
 
-          <div class="p-4 bg-gray-50 border-t flex justify-end">
-            <button onclick="submitNilai()" id="btnSaveNilai" class="w-full sm:w-auto bg-brandPrimary hover:bg-brandDark text-white font-bold py-2.5 px-6 rounded-lg shadow transition">
-              <i class="fa-solid fa-floppy-disk"></i> Simpan Nilai ke Sheet
+          <div class="p-4 bg-slate-50/80 border-t border-slate-200/80 flex justify-end">
+            <button onclick="submitNilai()" id="btnSaveNilai" class="w-full sm:w-auto bg-gradient-to-r from-brandPrimary to-brandDark hover:from-brandDark hover:to-black text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-red-950/20 transition flex items-center justify-center gap-2 text-sm">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Simpan Nilai ke Spreadsheet
             </button>
           </div>
         </div>
       </div>
 
       <!-- TAB 3: PENGATURAN -->
-      <div id="panelPengaturan" class="hidden max-w-xl mx-auto space-y-6">
-        <div class="bg-white rounded-xl p-6 shadow-sm border space-y-4">
-          <h3 class="font-bold text-gray-800 border-b pb-3 flex items-center gap-2">
+      <div id="panelPengaturan" class="hidden max-w-xl mx-auto space-y-5">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 space-y-4">
+          <h3 class="font-extrabold text-slate-800 border-b pb-3 flex items-center gap-2 text-sm">
             <i class="fa-solid fa-user-gear text-brandPrimary"></i> Ubah Profil & Akun Guru
           </h3>
           
           <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Guru (Panggilan)</label>
-            <input type="text" id="profNama" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-brandPrimary">
+            <label class="block text-xs font-bold text-slate-600 mb-1">Nama Guru (Panggilan)</label>
+            <input type="text" id="profNama" class="w-full border border-slate-200 rounded-xl p-3 text-xs font-semibold focus:ring-2 focus:ring-brandPrimary">
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">Username Login</label>
-              <input type="text" id="profUser" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-brandPrimary">
+              <label class="block text-xs font-bold text-slate-600 mb-1">Username Login</label>
+              <input type="text" id="profUser" class="w-full border border-slate-200 rounded-xl p-3 text-xs font-semibold focus:ring-2 focus:ring-brandPrimary">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">Password Baru</label>
-              <input type="password" id="profPass" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-brandPrimary">
+              <label class="block text-xs font-bold text-slate-600 mb-1">Password Baru</label>
+              <input type="password" id="profPass" class="w-full border border-slate-200 rounded-xl p-3 text-xs font-semibold focus:ring-2 focus:ring-brandPrimary">
             </div>
           </div>
 
-          <button onclick="saveProfile()" class="w-full bg-gray-800 hover:bg-black text-white font-bold py-2.5 rounded-lg text-xs transition">
+          <button onclick="saveProfile()" class="w-full bg-slate-800 hover:bg-black text-white font-bold py-3 rounded-xl text-xs transition shadow-sm">
             Simpan Perubahan Akun
           </button>
         </div>
 
-        <div class="bg-white rounded-xl p-6 shadow-sm border space-y-4">
-          <h3 class="font-bold text-gray-800 border-b pb-3 flex items-center gap-2">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 space-y-4">
+          <h3 class="font-extrabold text-slate-800 border-b pb-3 flex items-center gap-2 text-sm">
             <i class="fa-solid fa-plug text-brandPrimary"></i> Pengaturan Integrasi
           </h3>
-          <button onclick="openModalSettings()" class="w-full bg-red-50 text-brandPrimary border border-brandPrimary hover:bg-brandPrimary hover:text-white font-bold py-2.5 rounded-lg text-xs transition">
+          <button onclick="openModalSettings()" class="w-full bg-red-50 text-brandPrimary border border-red-200 hover:bg-brandPrimary hover:text-white font-bold py-3 rounded-xl text-xs transition">
             Atur / Ubah URL Google Apps Script
           </button>
-          <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-lg text-xs shadow transition">
+          <button onclick="logout()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl text-xs shadow-md shadow-rose-900/10 transition">
             Logout (Keluar Aplikasi)
           </button>
         </div>
@@ -205,14 +330,14 @@
     </main>
 
     <!-- FOOTER NAVIGASI BAWAH -->
-    <footer class="bg-slate-900 border-t border-slate-800 fixed bottom-0 inset-x-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 py-2.5 flex justify-around text-xs">
+    <footer class="bg-slate-900 border-t border-slate-800 fixed bottom-0 inset-x-0 z-40 shadow-2xl">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex justify-around text-xs">
         <button onclick="switchTab('absen')" id="navHomeBtn" class="flex flex-col items-center font-semibold text-slate-400 hover:text-white transition">
-          <i class="fa-solid fa-house text-base mb-0.5"></i>
+          <i class="fa-solid fa-house text-lg mb-0.5"></i>
           <span class="text-[11px]">Home</span>
         </button>
         <button onclick="switchTab('pengaturan')" id="navSettingsBtn" class="flex flex-col items-center font-semibold text-slate-400 hover:text-white transition">
-          <i class="fa-solid fa-gear text-base mb-0.5"></i>
+          <i class="fa-solid fa-gear text-lg mb-0.5"></i>
           <span class="text-[11px]">Pengaturan</span>
         </button>
       </div>
@@ -220,13 +345,14 @@
   </div>
 
   <!-- MODAL SETTINGS -->
-  <div id="modalSettings" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4">
-      <h3 class="font-bold text-gray-800">URL Google Apps Script</h3>
-      <input type="url" id="scriptUrlInput" class="w-full border rounded-lg p-2.5 text-xs font-mono" placeholder="https://script.google.com/macros/s/.../exec">
-      <div class="flex justify-end gap-2">
-        <button onclick="closeModalSettings()" class="px-4 py-2 bg-gray-100 text-xs rounded">Batal</button>
-        <button onclick="saveScriptUrl()" class="px-4 py-2 bg-brandPrimary text-white text-xs font-bold rounded">Simpan</button>
+  <div id="modalSettings" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+      <h3 class="font-extrabold text-slate-800 text-base">URL Google Apps Script</h3>
+      <p class="text-xs text-slate-500">Tempelkan Web App URL hasil Deploy dari Google Apps Script di sini:</p>
+      <input type="url" id="scriptUrlInput" class="w-full border border-slate-200 rounded-xl p-3 text-xs font-mono bg-slate-50 focus:ring-2 focus:ring-brandPrimary" placeholder="https://script.google.com/macros/s/.../exec">
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModalSettings()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl">Batal</button>
+        <button onclick="saveScriptUrl()" class="px-5 py-2.5 bg-brandPrimary hover:bg-brandDark text-white text-xs font-bold rounded-xl shadow-md">Simpan</button>
       </div>
     </div>
   </div>
@@ -249,6 +375,7 @@
       renderSiswaAbsenList();
       renderSiswaNilaiList();
       loadProfileFields();
+      updateStats();
       if (sessionStorage.getItem('isLoggedIn') === 'true') showDashboard();
     });
 
@@ -264,7 +391,7 @@
         else if (hour >= 15 && hour < 18) greeting = "Selamat Sore";
         else if (hour >= 18 || hour < 4) greeting = "Selamat Malam";
 
-        document.getElementById('greetingText').innerText = `${greeting} ${currentGuruName}, Semoga Harimu Selalu Menyenangkan`;
+        document.getElementById('greetingText').innerHTML = `<i class="fa-solid fa-sun text-yellow-300 mr-1"></i> ${greeting} ${currentGuruName}, Semoga Harimu Selalu Menyenangkan`;
       };
       update();
       setInterval(update, 1000);
@@ -288,15 +415,33 @@
 
     function logout() { sessionStorage.removeItem('isLoggedIn'); location.reload(); }
 
+    function getInitials(name) {
+      return name.split(' ').map(n => n[0]).slice(0, 2).join('');
+    }
+
     function renderSiswaAbsenList() {
       const c = document.getElementById('listSiswaAbsen');
       c.innerHTML = DAFTAR_SISWA.map((nama, idx) => `
-        <div class="p-3 hover:bg-gray-50 flex justify-between items-center text-xs">
-          <span class="font-semibold">${idx + 1}. ${nama}</span>
-          <div class="flex gap-1">
-            ${['Hadir', 'Izin', 'Sakit', 'Alpa'].map(st => `
-              <label><input type="radio" name="absen_${idx}" value="${st}" ${st==='Hadir'?'checked':''} class="peer hidden">
-              <span class="px-2 py-1 rounded border text-gray-600 peer-checked:bg-brandPrimary peer-checked:text-white cursor-pointer">${st}</span></label>
+        <div class="p-3 bg-white hover:bg-slate-50/80 rounded-2xl sm:rounded-xl border border-slate-100 sm:border-none flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 transition">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-brandPrimary to-brandAccent text-white flex items-center justify-center text-[10px] font-extrabold shadow-sm">
+              ${getInitials(nama)}
+            </div>
+            <span class="font-bold text-xs sm:text-sm text-slate-800">${idx + 1}. ${nama}</span>
+          </div>
+          <div class="flex gap-1.5 w-full sm:w-auto justify-end">
+            ${[
+              { st: 'Hadir', cls: 'peer-checked:bg-emerald-600 peer-checked:text-white' },
+              { st: 'Izin', cls: 'peer-checked:bg-amber-500 peer-checked:text-white' },
+              { st: 'Sakit', cls: 'peer-checked:bg-sky-500 peer-checked:text-white' },
+              { st: 'Alpa', cls: 'peer-checked:bg-rose-600 peer-checked:text-white' }
+            ].map(item => `
+              <label class="flex-1 sm:flex-none">
+                <input type="radio" name="absen_${idx}" value="${item.st}" ${item.st==='Hadir'?'checked':''} onchange="updateStats()" class="peer hidden status-radio">
+                <span class="w-full sm:w-auto px-3 py-1.5 rounded-xl border border-slate-200 text-slate-500 text-xs font-bold text-center block cursor-pointer transition ${item.cls}">
+                  ${item.st}
+                </span>
+              </label>
             `).join('')}
           </div>
         </div>
@@ -305,37 +450,76 @@
 
     function setAllAbsen(st) {
       DAFTAR_SISWA.forEach((_, idx) => {
-        document.querySelector(`input[name="absen_${idx}"][value="${st}"]`).checked = true;
+        const radio = document.querySelector(`input[name="absen_${idx}"][value="${st}"]`);
+        if (radio) radio.checked = true;
       });
+      updateStats();
+    }
+
+    function updateStats() {
+      let h = 0, i = 0, s = 0, a = 0;
+      DAFTAR_SISWA.forEach((_, idx) => {
+        const selected = document.querySelector(`input[name="absen_${idx}"]:checked`);
+        if (selected) {
+          if (selected.value === 'Hadir') h++;
+          else if (selected.value === 'Izin') i++;
+          else if (selected.value === 'Sakit') s++;
+          else if (selected.value === 'Alpa') a++;
+        }
+      });
+      document.getElementById('statHadir').innerText = h;
+      document.getElementById('statIzin').innerText = i;
+      document.getElementById('statSakit').innerText = s;
+      document.getElementById('statAlpa').innerText = a;
     }
 
     function renderSiswaNilaiList() {
       const c = document.getElementById('listSiswaNilai');
       c.innerHTML = DAFTAR_SISWA.map((nama, idx) => `
-        <div class="p-3 hover:bg-gray-50 flex justify-between items-center text-xs">
-          <span class="font-semibold">${idx + 1}. ${nama}</span>
-          <input type="number" min="0" max="100" id="nilai_${idx}" placeholder="0-100" class="w-20 border rounded p-1.5 text-center font-bold">
+        <div class="p-3 bg-white hover:bg-slate-50/80 rounded-2xl sm:rounded-xl border border-slate-100 sm:border-none flex justify-between items-center text-xs">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[10px] font-bold">
+              ${idx + 1}
+            </div>
+            <span class="font-bold text-slate-800 text-xs sm:text-sm">${nama}</span>
+          </div>
+          <input type="number" min="0" max="100" id="nilai_${idx}" placeholder="0-100" class="w-20 border border-slate-200 rounded-xl p-2 text-center font-extrabold text-brandPrimary bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brandPrimary transition">
         </div>
       `).join('');
     }
 
     async function submitAbsensi() {
       if (!scriptUrl) return openModalSettings();
+      const btn = document.getElementById('btnSaveAbsen');
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+
       const today = new Date().toLocaleDateString('id-ID');
       const list = DAFTAR_SISWA.map((nama, idx) => ({
         nama: nama,
         status: document.querySelector(`input[name="absen_${idx}"]:checked`).value
       }));
 
-      await fetch(scriptUrl, {
-        method: 'POST',
-        body: JSON.stringify({ action: "simpan_absensi", tanggal: today, absen_list: list })
-      });
-      alert("Absensi berhasil disimpan!");
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST',
+          body: JSON.stringify({ action: "simpan_absensi", tanggal: today, absen_list: list })
+        });
+        showAlert("Absensi harian berhasil disimpan ke Google Sheets!", "success");
+      } catch (err) {
+        showAlert("Gagal menyimpan absensi. Cek koneksi internet!", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Simpan Absensi ke Spreadsheet`;
+      }
     }
 
     async function submitNilai() {
       if (!scriptUrl) return openModalSettings();
+      const btn = document.getElementById('btnSaveNilai');
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+
       const today = new Date().toLocaleDateString('id-ID');
       const mapel = document.getElementById('selectMapel').value;
       const jenis = document.getElementById('selectJenisNilai').value;
@@ -345,11 +529,18 @@
         nilai: document.getElementById(`nilai_${idx}`).value
       }));
 
-      await fetch(scriptUrl, {
-        method: 'POST',
-        body: JSON.stringify({ action: "simpan_nilai", mapel: mapel, jenis_nilai: jenis, tanggal: today, nilai_list: list })
-      });
-      alert(`Nilai ${jenis} untuk ${mapel} berhasil disimpan!`);
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST',
+          body: JSON.stringify({ action: "simpan_nilai", mapel: mapel, jenis_nilai: jenis, tanggal: today, nilai_list: list })
+        });
+        showAlert(`Nilai ${jenis} untuk ${mapel} berhasil disimpan!`, "success");
+      } catch (err) {
+        showAlert("Gagal menyimpan nilai. Cek koneksi internet!", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Simpan Nilai ke Spreadsheet`;
+      }
     }
 
     function switchTab(tab) {
@@ -365,14 +556,14 @@
 
       if (tab === 'absen') {
         document.getElementById('panelAbsensi').classList.remove('hidden');
-        document.getElementById('tabBtnAbsen').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 bg-brandPrimary text-white shadow";
-        document.getElementById('tabBtnNilai').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 text-gray-600";
+        document.getElementById('tabBtnAbsen').className = "px-5 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 bg-brandPrimary text-white shadow-md shadow-red-950/20";
+        document.getElementById('tabBtnNilai').className = "px-5 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900";
         document.getElementById('navHomeBtn').className = "flex flex-col items-center font-bold text-white transition";
       } else if (tab === 'nilai') {
         document.getElementById('panelNilai').classList.remove('hidden');
         document.getElementById('mapelContainer').classList.remove('hidden');
-        document.getElementById('tabBtnAbsen').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 text-gray-600";
-        document.getElementById('tabBtnNilai').className = "px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 bg-brandPrimary text-white shadow";
+        document.getElementById('tabBtnAbsen').className = "px-5 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900";
+        document.getElementById('tabBtnNilai').className = "px-5 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 bg-brandPrimary text-white shadow-md shadow-red-950/20";
         document.getElementById('navHomeBtn').className = "flex flex-col items-center font-bold text-white transition";
       } else if (tab === 'pengaturan') {
         document.getElementById('panelPengaturan').classList.remove('hidden');
@@ -397,15 +588,31 @@
       localStorage.setItem('app_pass', currentPass);
 
       initClockAndGreeting();
-      alert("Profil dan kredensial login berhasil diperbarui!");
+      showAlert("Profil dan kredensial login berhasil diperbarui!", "success");
     }
 
+    function showAlert(msg, type) {
+      const alertBox = document.getElementById('statusAlert');
+      alertBox.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-800', 'border-emerald-200', 'bg-rose-50', 'text-rose-800', 'border-rose-200');
+      
+      if (type === 'success') {
+        alertBox.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+        alertBox.innerHTML = `<span id="alertMessage"><i class="fa-solid fa-circle-check text-emerald-600 mr-2"></i> ${msg}</span><button onclick="closeAlert()" class="text-emerald-500"><i class="fa-solid fa-xmark"></i></button>`;
+      } else {
+        alertBox.classList.add('bg-rose-50', 'text-rose-800', 'border-rose-200');
+        alertBox.innerHTML = `<span id="alertMessage"><i class="fa-solid fa-triangle-exclamation text-rose-600 mr-2"></i> ${msg}</span><button onclick="closeAlert()" class="text-rose-500"><i class="fa-solid fa-xmark"></i></button>`;
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeAlert() { document.getElementById('statusAlert').classList.add('hidden'); }
     function openModalSettings() { document.getElementById('modalSettings').classList.remove('hidden'); }
     function closeModalSettings() { document.getElementById('modalSettings').classList.add('hidden'); }
     function saveScriptUrl() {
       scriptUrl = document.getElementById('scriptUrlInput').value.trim();
       localStorage.setItem('app_script_url', scriptUrl);
       closeModalSettings();
+      showAlert("URL Google Apps Script berhasil disimpan!", "success");
     }
   </script>
 </body>
